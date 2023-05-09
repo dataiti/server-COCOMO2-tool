@@ -3,14 +3,8 @@ const asyncHandler = require("express-async-handler");
 const JWT = require("jsonwebtoken");
 
 const generateAccessToken = (_id) => {
-  return JWT.sign({ _id }, process.env.JWT_SECRET_ACCESS_KEY, {
+  return JWT.sign({ _id }, process.env.JWT_ACCESS_KEY, {
     expiresIn: "1d",
-  });
-};
-
-const generateRefreshToken = (_id) => {
-  return JWT.sign({ _id }, process.env.JWT_SECRET_REFRESH_KEY, {
-    expiresIn: "30d",
   });
 };
 
@@ -47,90 +41,23 @@ const login = asyncHandler(async (req, res) => {
     throw new Error("Password is incorrect");
 
   const accessToken = generateAccessToken(user._id);
-  const newRefreshToken = generateRefreshToken(user._id);
-
-  await User.findOneAndUpdate(
-    {
-      _id: user._id,
-    },
-    { $set: { refreshToken: newRefreshToken } },
-    { new: true }
-  );
-
-  return (
-    res
-      // .cookie('refreshToken', refreshToken, { httpOnly: true, maxAge: 7 * 24 * 60 * 60 * 1000 })
-      .status(200)
-      .json({
-        success: true,
-        accessToken,
-        refreshToken: newRefreshToken,
-        data: user,
-      })
-  );
-});
-
-const logout = asyncHandler(async (req, res) => {
-  // const cookie = req.cookies;
-
-  // if (!cookie || !cookie.refreshToken) throw new Error('No refresh token in cookies');
-
-  const { refreshToken } = req.body;
-
-  if (!refreshToken) throw new Error("No refresh token in request body");
-
-  await User.findOneAndUpdate(
-    {
-      refreshToken: cookie.refreshToken,
-    },
-    { $set: { refreshToken: "" } },
-    { new: true }
-  );
-
-  return (
-    res
-      // .clearCookie('refreshToken', { httpOnly: true, secure: true })
-      .status(200)
-      .json({
-        success: true,
-        message: "Logout successfully",
-      })
-  );
-});
-
-const refreshToken = asyncHandler(async (req, res) => {
-  // const cookie = req.cookies;
-
-  // if (!cookie || !cookie.refreshToken) throw new Error('No refresh token in cookies');
-
-  const { refreshToken } = req.body;
-
-  if (!refreshToken) throw new Error("No refresh token in request body");
-
-  const decoded = JWT.verify(
-    cookie.refreshToken,
-    process.env.JWT_SECRET_REFRESH_KEY
-  );
-
-  const user = await User.findOne({
-    _id: decoded._id,
-    refreshToken: cookie.refreshToken,
-  });
-
-  const newAccessToken = generateAccessToken(user._id);
 
   return res.status(200).json({
     success: true,
-    message: "Get refresh token is successfully",
-    accessToken: newAccessToken,
+    accessToken,
+    data: user,
+  });
+});
+
+const logout = asyncHandler(async (req, res) => {
+  return res.status(200).json({
+    success: true,
+    message: "Logout successfully",
   });
 });
 
 const socialLogin = asyncHandler(async (req, res, next) => {
   const { facebookId, googleId } = req.body;
-  console.log(googleId);
-
-  // if (!facebookId || !googleId) throw new Error('googleId or facebookId field must be required');
 
   const user = await User.findOne({
     $or: [
@@ -223,27 +150,12 @@ const createToken = asyncHandler(async (req, res) => {
   const user = req.auth;
 
   const accessToken = generateAccessToken(user._id);
-  const newRefreshToken = generateRefreshToken(user._id);
 
-  await User.findOneAndUpdate(
-    {
-      _id: user._id,
-    },
-    { $set: { refreshToken: newRefreshToken } },
-    { new: true }
-  );
-
-  return (
-    res
-      // .cookie('refreshToken', refreshToken, { httpOnly: true, maxAge: 7 * 24 * 60 * 60 * 1000 })
-      .status(200)
-      .json({
-        success: true,
-        accessToken,
-        refreshToken: newRefreshToken,
-        data: user,
-      })
-  );
+  return res.status(200).json({
+    success: true,
+    accessToken,
+    data: user,
+  });
 });
 
 const forgotPassword = asyncHandler(async (req, res) => {});
@@ -254,7 +166,6 @@ module.exports = {
   register,
   login,
   logout,
-  refreshToken,
   forgotPassword,
   resetPassword,
   socialLogin,

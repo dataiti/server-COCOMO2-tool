@@ -18,17 +18,17 @@ const userSchema = new mongoose.Schema(
     },
     password: {
       type: String,
-      trim: true,
-      required: true,
-      select: false,
+    },
+    facebookId: {
+      type: String,
+    },
+    googleId: {
+      type: String,
     },
     avatar: {
       type: String,
       default:
         "https://res.cloudinary.com/doo78f14s/image/upload/v1677427616/CDIO2-project/dedault_jd3qnu.jpg",
-    },
-    refreshToken: {
-      type: String,
     },
   },
   { timestamps: true }
@@ -39,10 +39,11 @@ userSchema.pre("save", async function (next) {
     next();
   }
   const salt = await bcrypt.genSalt(10);
-  this.password = await bcrypt.hash(this.password, salt);
+  this.password = bcrypt.hashSync(this.password, salt);
 });
 
 userSchema.methods.isCorrectPassword = async function (password) {
+  console.log(password, this.password);
   try {
     return await bcrypt.compare(password, this.password);
   } catch (error) {

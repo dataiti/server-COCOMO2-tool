@@ -4,6 +4,7 @@ const { getFactorValue, getLanguageFactorValue } = require("../utils/fn");
 
 const calculateFunctionPoints = asyncHandler(async (req, res) => {
   const {
+    projectName,
     typeSubmit,
     sizeType,
     language,
@@ -91,6 +92,8 @@ const calculateFunctionPoints = asyncHandler(async (req, res) => {
 
   if (typeSubmit === "save") {
     newResult = new Result({
+      ownerProject: req.user._id,
+      projectName,
       sizeType,
       language,
       functionPoints: Number(functionPoints),
@@ -222,7 +225,8 @@ const calculateSLOC = asyncHandler(async (req, res) => {
     // SLOC = (Function points * language factor)
     SLOC =
       Number(newSize) +
-      Number(reusedSize) * (0.3 * Number(reusedIM) + Number(reusedAA));
+      Number(reusedSize) *
+        ((0.3 * Number(reusedIM)) / 100 + Number(reusedAA) / 100);
 
     // Effort = a * (SLOC)^b * EAF, a = 2.94
     effort = a * Math.pow(SLOC / 1000, b) * EAF;
@@ -276,13 +280,24 @@ const calculateSLOC = asyncHandler(async (req, res) => {
     });
 
     await newResult.save();
-  }
-
-  return res.status(200).json({
-    success: true,
-    message: "Calculate Cocomo ii type size Function Points successfully",
-    data: newResult,
-  });
+    return res.status(200).json({
+      success: true,
+      message: "Save Cocomo ii type size Source Lines of Code  successfully",
+      data: newResult,
+    });
+  } else if (typeSubmit === "calculate")
+    return res.status(200).json({
+      success: true,
+      message:
+        "Calculate Cocomo ii type size Source Lines of Code  successfully",
+      data: {
+        softwareEffort: effort,
+        softwareSchedule: schedule,
+        cost,
+        totalEquivalentSize: SLOC,
+        softwareEAF: EAF,
+      },
+    });
 });
 
 module.exports = { calculateFunctionPoints, calculateSLOC };

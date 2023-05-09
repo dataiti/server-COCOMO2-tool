@@ -3,10 +3,18 @@ const {
   calculateFunctionPoints,
   calculateSLOC,
 } = require("../controllers/calculate.controller");
+const {
+  userById,
+  getListConstructionProject,
+} = require("../controllers/user.controller");
 
 const router = express.Router();
 
-router.post("/function-points", calculateFunctionPoints);
-router.post("/source-line-of-code", calculateSLOC);
+router.post("/function-points/:userId", calculateFunctionPoints);
+router.post("/source-line-of-code/:userId", calculateSLOC);
+
+router.get("/list-construction/:userId", getListConstructionProject);
+
+router.param("userId", userById);
 
 module.exports = router;
