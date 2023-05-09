@@ -240,7 +240,7 @@ const calculateSLOC = asyncHandler(async (req, res) => {
 
   let newResult;
 
-  if (b && a && effort && schedule && cost && SLOC && EAF) {
+  if (typeSubmit === "save") {
     newResult = new Result({
       sizeType,
       newSize: Number(newSize),
