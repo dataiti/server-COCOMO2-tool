@@ -1,5 +1,5 @@
 const asyncHandler = require("express-async-handler");
-const Result = require("../models/result.model");
+const Result = require("../models/construction.model");
 const { getFactorValue, getLanguageFactorValue } = require("../utils/fn");
 
 const calculateFunctionPoints = asyncHandler(async (req, res) => {
@@ -151,7 +151,9 @@ const calculateFunctionPoints = asyncHandler(async (req, res) => {
 
 const calculateSLOC = asyncHandler(async (req, res) => {
   const {
+    projectName,
     sizeType,
+    typeSubmit,
     newSize = 0,
     reusedSize = 0,
     reusedIM = 0,
@@ -242,6 +244,8 @@ const calculateSLOC = asyncHandler(async (req, res) => {
 
   if (typeSubmit === "save") {
     newResult = new Result({
+      ownerProject: req.user._id,
+      projectName,
       sizeType,
       newSize: Number(newSize),
       reusedSize: Number(reusedSize),

@@ -6,7 +6,7 @@ const {
 const {
   userById,
   getListConstructionProject,
-} = require("../controllers/user.controller");
+} = require("../controllers/construction.controller");
 
 const router = express.Router();
 
