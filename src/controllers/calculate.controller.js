@@ -4,8 +4,6 @@ const { getFactorValue, getLanguageFactorValue } = require("../utils/fn");
 
 const calculateFunctionPoints = asyncHandler(async (req, res) => {
   const {
-    projectName,
-    typeSubmit,
     sizeType,
     language,
     functionPoints = 0,
@@ -88,72 +86,22 @@ const calculateFunctionPoints = asyncHandler(async (req, res) => {
     cost = Number(softwareLaborCostPerPM) * effort;
   }
 
-  let newResult;
-
-  if (typeSubmit === "save") {
-    newResult = new Result({
-      ownerProject: req.user._id,
-      projectName,
-      sizeType,
-      language,
-      functionPoints: Number(functionPoints),
-      PREC,
-      FLEX,
-      RESL,
-      TEAM,
-      PMAT,
-      RELY,
-      DATA,
-      CPLX,
-      RUSE,
-      DOCU,
-      ACAP,
-      PCAP,
-      PCON,
-      AEXP,
-      PEXP,
-      LTEX,
-      TIME,
-      STOR,
-      PVOL,
-      TOOL,
-      SITE,
-      SCED,
-      softwareLaborCostPerPM: Number(softwareLaborCostPerPM),
-      softwareEAF: Number(EAF),
-      sizeExponent: Number(b),
-      //   scheduleExponent: Number(),
-      softwareEffort: Number(effort),
-      softwareSchedule: Number(schedule),
-      totalEquivalentSize: Number(SLOC),
-      cost: Number(cost),
-    });
-
-    await newResult.save();
-    return res.status(200).json({
-      success: true,
-      message: "Save Cocomo ii type size Function Points successfully",
-      data: newResult,
-    });
-  } else if (typeSubmit === "calculate")
-    return res.status(200).json({
-      success: true,
-      message: "Calculate Cocomo ii type size Function Points successfully",
-      data: {
-        softwareEffort: effort,
-        softwareSchedule: schedule,
-        cost,
-        totalEquivalentSize: SLOC,
-        softwareEAF: EAF,
-      },
-    });
+  return res.status(200).json({
+    success: true,
+    message: "Calculate Cocomo ii type size Function Points successfully",
+    data: {
+      softwareEffort: effort,
+      softwareSchedule: schedule,
+      cost,
+      totalEquivalentSize: SLOC,
+      softwareEAF: EAF,
+    },
+  });
 });
 
 const calculateSLOC = asyncHandler(async (req, res) => {
   const {
-    projectName,
     sizeType,
-    typeSubmit,
     newSize = 0,
     reusedSize = 0,
     reusedIM = 0,
@@ -224,7 +172,7 @@ const calculateSLOC = asyncHandler(async (req, res) => {
       getFactorValue({ SITE }) *
       getFactorValue({ SCED });
 
-    // SLOC = (Function points * language factor)
+    // SLOC = newSize + reusedSize * (0.3*IM/100 + AA/100)
     SLOC =
       Number(newSize) +
       Number(reusedSize) *
@@ -240,68 +188,17 @@ const calculateSLOC = asyncHandler(async (req, res) => {
     cost = Number(softwareLaborCostPerPM) * effort;
   }
 
-  let newResult;
-
-  if (typeSubmit === "save") {
-    newResult = new Result({
-      ownerProject: req.user._id,
-      projectName,
-      sizeType,
-      newSize: Number(newSize),
-      reusedSize: Number(reusedSize),
-      reusedIM: Number(reusedIM),
-      reusedAA: Number(reusedAA),
-      PREC,
-      FLEX,
-      RESL,
-      TEAM,
-      PMAT,
-      RELY,
-      DATA,
-      CPLX,
-      RUSE,
-      DOCU,
-      ACAP,
-      PCAP,
-      PCON,
-      AEXP,
-      PEXP,
-      LTEX,
-      TIME,
-      STOR,
-      PVOL,
-      TOOL,
-      SITE,
-      SCED,
-      softwareLaborCostPerPM: Number(softwareLaborCostPerPM),
-      softwareEAF: Number(EAF),
-      sizeExponent: Number(b),
-      //   scheduleExponent: Number(),
-      softwareEffort: Number(effort),
-      softwareSchedule: Number(schedule),
-      totalEquivalentSize: Number(SLOC),
-      cost: Number(cost),
-    });
-
-    await newResult.save();
-    return res.status(200).json({
-      success: true,
-      message: "Save Cocomo ii type size Source Lines of Code  successfully",
-      data: newResult,
-    });
-  } else if (typeSubmit === "calculate")
-    return res.status(200).json({
-      success: true,
-      message:
-        "Calculate Cocomo ii type size Source Lines of Code  successfully",
-      data: {
-        softwareEffort: effort,
-        softwareSchedule: schedule,
-        cost,
-        totalEquivalentSize: SLOC,
-        softwareEAF: EAF,
-      },
-    });
+  return res.status(200).json({
+    success: true,
+    message: "Calculate Cocomo ii type size Source Lines of Code  successfully",
+    data: {
+      softwareEffort: effort,
+      softwareSchedule: schedule,
+      cost,
+      totalEquivalentSize: SLOC,
+      softwareEAF: EAF,
+    },
+  });
 });
 
 module.exports = { calculateFunctionPoints, calculateSLOC };

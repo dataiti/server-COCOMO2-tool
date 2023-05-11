@@ -3,6 +3,7 @@ const {
   userById,
   constructionById,
   getDetailConstruction,
+  saveConstruction,
   updateConstruction,
   deleteConstruction,
   getListConstructionProject,
@@ -15,6 +16,8 @@ router.get(
   "/detail-construction/:userId/:constructionId",
   getDetailConstruction
 );
+
+router.post("/save-construction/:userId", saveConstruction);
 
 router.put("/update-construction/:userId/:constructionId", updateConstruction);
 

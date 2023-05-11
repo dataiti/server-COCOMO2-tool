@@ -50,7 +50,7 @@ const getDetailConstruction = asyncHandler(async (req, res) => {
   const findConstruction = await Construction.findOne({
     _id: req.construction._id,
     ownerProject: req.user._id,
-  });
+  }).populate("ownerProject", "displayName username email");
 
   if (!findConstruction)
     throw new Error(`This construction by id:${req.user._id} is not found`);
@@ -62,7 +62,150 @@ const getDetailConstruction = asyncHandler(async (req, res) => {
   });
 });
 
-const updateConstruction = asyncHandler(async (req, res) => {});
+const saveConstruction = asyncHandler(async (req, res) => {
+  const {
+    projectName,
+    sizeType,
+    language,
+    functionPoints = 0,
+    newSize = 0,
+    reusedSize = 0,
+    reusedIM = 0,
+    reusedAA = 0,
+    PREC,
+    FLEX,
+    RESL,
+    TEAM,
+    PMAT,
+    RELY,
+    DATA,
+    CPLX,
+    RUSE,
+    DOCU,
+    ACAP,
+    PCAP,
+    PCON,
+    AEXP,
+    PEXP,
+    LTEX,
+    TIME,
+    STOR,
+    PVOL,
+    TOOL,
+    SITE,
+    SCED,
+    softwareLaborCostPerPM,
+    softwareEAF,
+    sizeExponent,
+    softwareEffort,
+    softwareSchedule,
+    totalEquivalentSize,
+    cost,
+  } = req.body;
+
+  if (!projectName) throw new Error("ProjectName field is required");
+
+  const newConstruction = new Construction({
+    ownerProject: req.user._id,
+    projectName,
+    sizeType,
+    language,
+    functionPoints: Number(functionPoints),
+    newSize,
+    reusedSize,
+    reusedIM,
+    reusedAA,
+    PREC,
+    FLEX,
+    RESL,
+    TEAM,
+    PMAT,
+    RELY,
+    DATA,
+    CPLX,
+    RUSE,
+    DOCU,
+    ACAP,
+    PCAP,
+    PCON,
+    AEXP,
+    PEXP,
+    LTEX,
+    TIME,
+    STOR,
+    PVOL,
+    TOOL,
+    SITE,
+    SCED,
+    softwareLaborCostPerPM: Number(softwareLaborCostPerPM),
+    softwareEAF: Number(softwareEAF),
+    // sizeExponent: Number(sizeExponent),
+    //   scheduleExponent: Number(),
+    softwareEffort: Number(softwareEffort),
+    softwareSchedule: Number(softwareSchedule),
+    totalEquivalentSize: Number(totalEquivalentSize),
+    cost: Number(cost),
+  });
+
+  await newConstruction.save();
+
+  return res.status(200).json({
+    success: true,
+    message: "Save construction is successfully",
+    data: newConstruction,
+  });
+});
+
+const updateConstruction = asyncHandler(async (req, res) => {
+  const {
+    projectName,
+    sizeType,
+    typeSubmit,
+    language,
+    functionPoints = 0,
+    newSize = 0,
+    reusedSize = 0,
+    reusedIM = 0,
+    reusedAA = 0,
+    PREC,
+    FLEX,
+    RESL,
+    TEAM,
+    PMAT,
+    RELY,
+    DATA,
+    CPLX,
+    RUSE,
+    DOCU,
+    ACAP,
+    PCAP,
+    PCON,
+    AEXP,
+    PEXP,
+    LTEX,
+    TIME,
+    STOR,
+    PVOL,
+    TOOL,
+    SITE,
+    SCED,
+    softwareLaborCostPerPM,
+  } = req.body;
+
+  const findConstruction = await Construction.findOne({
+    _id: req.construction._id,
+    ownerProject: req.user._id,
+  });
+
+  if (!findConstruction) throw new Error("Construction is not found");
+
+  if (sizeType === "update") {
+    const updateConstruction = await Construction.findOneAndUpdate(
+      { _id: findConstruction._id, $set: {} },
+      { new: true }
+    );
+  }
+});
 
 const deleteConstruction = asyncHandler(async (req, res) => {
   const findConstruction = await Construction.findOne({
@@ -125,6 +268,7 @@ module.exports = {
   userById,
   constructionById,
   getDetailConstruction,
+  saveConstruction,
   updateConstruction,
   deleteConstruction,
   getListConstructionProject,

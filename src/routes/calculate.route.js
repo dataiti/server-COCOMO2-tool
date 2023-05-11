@@ -10,8 +10,8 @@ const {
 
 const router = express.Router();
 
-router.post("/function-points/:userId", calculateFunctionPoints);
-router.post("/source-line-of-code/:userId", calculateSLOC);
+router.post("/function-points", calculateFunctionPoints);
+router.post("/source-line-of-code", calculateSLOC);
 
 router.get("/list-construction/:userId", getListConstructionProject);
 
