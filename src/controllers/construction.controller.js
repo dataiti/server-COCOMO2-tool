@@ -101,6 +101,53 @@ const saveConstruction = asyncHandler(async (req, res) => {
     softwareSchedule,
     totalEquivalentSize,
     cost,
+    inceptionEffort,
+    inceptionSchedule,
+    inceptionAverageStaff,
+    inceptionCost,
+    elaborationEffort,
+    elaborationSchedule,
+    elaborationAverageStaff,
+    elaborationCost,
+    constructionEffort,
+    constructionSchedule,
+    constructionAverageStaff,
+    constructionCost,
+    transitionEffort,
+    transitionSchedule,
+    transitionAverageStaff,
+    transitionCost,
+    managementInception,
+    environmentPerCMInception,
+    requirementsInception,
+    designInception,
+    implementationInception,
+    assessmentInception,
+    deploymentInception,
+
+    managementElaboration,
+    environmentPerCMElaboration,
+    requirementsElaboration,
+    designElaboration,
+    implementationElaboration,
+    assessmentElaboration,
+    deploymentElaboration,
+
+    managementConstruction,
+    environmentPerCMConstruction,
+    requirementsConstruction,
+    designConstruction,
+    implementationConstruction,
+    assessmentConstruction,
+    deploymentConstruction,
+
+    managementTransition,
+    environmentPerCMTransition,
+    requirementsTransition,
+    designTransition,
+    implementationTransition,
+    assessmentTransition,
+    deploymentTransition,
   } = req.body;
 
   if (!projectName) throw new Error("ProjectName field is required");
@@ -145,6 +192,55 @@ const saveConstruction = asyncHandler(async (req, res) => {
     softwareSchedule: Number(softwareSchedule),
     totalEquivalentSize: Number(totalEquivalentSize),
     cost: Number(cost),
+
+    inceptionEffort,
+    inceptionSchedule,
+    inceptionAverageStaff,
+    inceptionCost,
+    elaborationEffort,
+    elaborationSchedule,
+    elaborationAverageStaff,
+    elaborationCost,
+    constructionEffort,
+    constructionSchedule,
+    constructionAverageStaff,
+    constructionCost,
+    transitionEffort,
+    transitionSchedule,
+    transitionAverageStaff,
+    transitionCost,
+
+    managementInception,
+    environmentPerCMInception,
+    requirementsInception,
+    designInception,
+    implementationInception,
+    assessmentInception,
+    deploymentInception,
+
+    managementElaboration,
+    environmentPerCMElaboration,
+    requirementsElaboration,
+    designElaboration,
+    implementationElaboration,
+    assessmentElaboration,
+    deploymentElaboration,
+
+    managementConstruction,
+    environmentPerCMConstruction,
+    requirementsConstruction,
+    designConstruction,
+    implementationConstruction,
+    assessmentConstruction,
+    deploymentConstruction,
+
+    managementTransition,
+    environmentPerCMTransition,
+    requirementsTransition,
+    designTransition,
+    implementationTransition,
+    assessmentTransition,
+    deploymentTransition,
   });
 
   await newConstruction.save();
@@ -225,15 +321,21 @@ const deleteConstruction = asyncHandler(async (req, res) => {
 });
 
 const getListConstructionProject = asyncHandler(async (req, res) => {
-  const search = req.query.q || "";
+  const search = req.query.q ? req.query.q : "";
   const regex = search
     .split(" ")
     .filter((q) => q)
     .join("|");
-  const sortBy = req.query.sortBy || "-_id";
-  const orderBy = req.query.orderBy || "asc";
-  const limit = Number(req.query.limit) || 20;
-  const page = Number(req.query.limit) || 1;
+  const sortBy = req.query.sortBy ? req.query.sortBy : "_id";
+  const orderBy =
+    req.query.orderBy &&
+    (req.query.orderBy == "asc" || req.query.orderBy == "desc")
+      ? req.query.orderBy
+      : "asc";
+  const limit =
+    req.query.limit && req.query.limit > 0 ? Number(req.query.limit) : 16;
+  const page =
+    req.query.page && req.query.page > 0 ? Number(req.query.page) : 1;
   let skip = (page - 1) * limit;
 
   const filterArgs = {

@@ -233,4 +233,68 @@ const factorials = [
   },
 ];
 
-module.exports = { languageFactor, factorials };
+const acquisitionPhaseDistributionConstant = {
+  inceptionEffort: 5.9818,
+  inceptionSchedule: 12.3288,
+  inceptionCost: 5.9857,
+
+  elaborationEffort: 24.0572,
+  elaborationSchedule: 37.6712,
+  elaborationCost: 24,
+
+  constructionEffort: 75.9428,
+  constructionSchedule: 62.3288,
+  constructionCost: 76,
+
+  transitionEffort: 11.9636,
+  transitionSchedule: 12.3288,
+  transitionCost: 12,
+};
+
+const softwareEffortDistributionConstant = {
+  managementInception: 13.9344,
+  environmentPerCMInception: 10.1093,
+  requirementsInception: 37.9781,
+  designInception: 19.1257,
+  implementationInception: 7.9235,
+  assessmentInception: 7.9235,
+  deploymentInception: 3.0055,
+
+  managementElaboration: 12.0137,
+  environmentPerCMElaboration: 7.9833,
+  requirementsElaboration: 18.0205,
+  designElaboration: 35.9727,
+  implementationElaboration: 12.9693,
+  assessmentElaboration: 10.0341,
+  deploymentElaboration: 3.0034,
+
+  managementConstruction: 10.0022,
+  environmentPerCMConstruction: 5.0011,
+  requirementsConstruction: 7.9975,
+  designConstruction: 15.9948,
+  implementationConstruction: 33.9944,
+  assessmentConstruction: 23.9922,
+  deploymentConstruction: 2.9963,
+
+  managementTransition: 14.0518,
+  environmentPerCMTransition: 5.0477,
+  requirementsTransition: 3.9563,
+  designTransition: 3.9563,
+  implementationTransition: 18.9632,
+  assessmentTransition: 24.0109,
+  deploymentTransition: 30.0136,
+};
+
+// const acquisitionPhaseDistributionConstant = {
+//   inception: [],
+//   elaboration: [],
+//   construction: [],
+//   transition: [],
+// };
+
+module.exports = {
+  languageFactor,
+  factorials,
+  acquisitionPhaseDistributionConstant,
+  softwareEffortDistributionConstant,
+};
