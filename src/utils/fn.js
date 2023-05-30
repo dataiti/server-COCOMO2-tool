@@ -2,7 +2,6 @@ const { factorials, languageFactor } = require("./constant");
 
 const getFactorValue = (factor) => {
   const key = Object.keys(factor)[0];
-  console.log(key);
   const item = factorials.find((el) => el.hasOwnProperty(key));
   return item[key][factor[key]];
 };

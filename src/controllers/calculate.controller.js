@@ -188,6 +188,9 @@ const calculateSLOC = asyncHandler(async (req, res) => {
   let implementationTransition = 0;
   let assessmentTransition = 0;
   let deploymentTransition = 0;
+  let dataChart = [];
+  let arr = [];
+  let totalMonth = 0;
 
   if (sizeType === "SLOC") {
     // b = 0.91 + 0.01 * (sum(SF))
@@ -290,7 +293,39 @@ const calculateSLOC = asyncHandler(async (req, res) => {
     implementationTransition = Number(transitionEffort * (18.9632 / 100));
     assessmentTransition = Number(transitionEffort * (24.0109 / 100));
     deploymentTransition = Number(transitionEffort * (30.0136 / 100));
+
+    totalMonth =
+      Math.floor(inceptionSchedule) +
+      Math.floor(elaborationSchedule) +
+      Math.floor(constructionSchedule) +
+      Math.floor(transitionSchedule);
+
+    for (let i = 1; i <= totalMonth; i++) {
+      arr.push(i);
+    }
+
+    for (let i = 1; i <= inceptionSchedule; i++) {
+      dataChart.push(inceptionEffort / inceptionSchedule);
+    }
+
+    for (let i = 1; i <= elaborationSchedule; i++) {
+      dataChart.push(elaborationEffort / elaborationSchedule);
+    }
+
+    for (let i = 1; i <= constructionSchedule; i++) {
+      dataChart.push(constructionEffort / constructionSchedule);
+    }
+
+    for (let i = 1; i <= transitionSchedule; i++) {
+      dataChart.push(transitionEffort / transitionSchedule);
+    }
+
+    arr = arr.map((item, index) => {
+      return { _id: item, data: dataChart[index] };
+    });
   }
+
+  console.log(arr);
 
   return res.status(200).json({
     success: true,
@@ -348,6 +383,7 @@ const calculateSLOC = asyncHandler(async (req, res) => {
       implementationTransition,
       assessmentTransition,
       deploymentTransition,
+      dataChart: arr,
     },
   });
 });
