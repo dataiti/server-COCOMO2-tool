@@ -41,6 +41,57 @@ const calculateFunctionPoints = asyncHandler(async (req, res) => {
   let SLOC = 0;
   let schedule = 1;
   let cost = 0;
+  let inceptionEffort = 0;
+  let inceptionSchedule = 0;
+  let inceptionAverageStaff = 0;
+  let inceptionCost = 0;
+
+  let elaborationEffort = 0;
+  let elaborationSchedule = 0;
+  let elaborationAverageStaff = 0;
+  let elaborationCost = 0;
+
+  let constructionEffort = 0;
+  let constructionSchedule = 0;
+  let constructionAverageStaff = 0;
+  let constructionCost = 0;
+
+  let transitionEffort = 0;
+  let transitionSchedule = 0;
+  let transitionAverageStaff = 0;
+  let transitionCost = 0;
+
+  let managementInception = 0;
+  let environmentPerCMInception = 0;
+  let requirementsInception = 0;
+  let designInception = 0;
+  let implementationInception = 0;
+  let assessmentInception = 0;
+  let deploymentInception = 0;
+  let managementElaboration = 0;
+  let environmentPerCMElaboration = 0;
+  let requirementsElaboration = 0;
+  let designElaboration = 0;
+  let implementationElaboration = 0;
+  let assessmentElaboration = 0;
+  let deploymentElaboration = 0;
+  let managementConstruction = 0;
+  let environmentPerCMConstruction = 0;
+  let requirementsConstruction = 0;
+  let designConstruction = 0;
+  let implementationConstruction = 0;
+  let assessmentConstruction = 0;
+  let deploymentConstruction = 0;
+  let managementTransition = 0;
+  let environmentPerCMTransition = 0;
+  let requirementsTransition = 0;
+  let designTransition = 0;
+  let implementationTransition = 0;
+  let assessmentTransition = 0;
+  let deploymentTransition = 0;
+  let dataChart = [];
+  let arr = [];
+  let totalMonth = 0;
 
   if (sizeType === "FP") {
     // b = 0.91 + 0.01 * (sum(SF))
@@ -84,6 +135,92 @@ const calculateFunctionPoints = asyncHandler(async (req, res) => {
 
     // cost = (softwareLaborCostPerPM * Effort)
     cost = Number(softwareLaborCostPerPM) * effort;
+
+    // Acquisition Phase Distribution Caculate
+    inceptionEffort = Number(effort * (5.9818 / 100));
+    inceptionSchedule = Number(schedule * (12.3288 / 100));
+    inceptionAverageStaff = Number(inceptionEffort / inceptionSchedule);
+    inceptionCost = Number(cost * (5.9857 / 100));
+
+    elaborationEffort = Number(effort * (24.0572 / 100));
+    elaborationSchedule = Number(schedule * (37.6712 / 100));
+    elaborationAverageStaff = Number(elaborationEffort / elaborationSchedule);
+    elaborationCost = Number(cost * (24 / 100));
+
+    constructionEffort = Number(effort * (75.9428 / 100));
+    constructionSchedule = Number(schedule * (62.3288 / 100));
+    constructionAverageStaff = Number(
+      constructionEffort / constructionSchedule
+    );
+    constructionCost = Number(cost * (76 / 100));
+
+    transitionEffort = Number(effort * (11.9636 / 100));
+    transitionSchedule = Number(schedule * (12.3288 / 100));
+    transitionAverageStaff = Number(transitionEffort / transitionSchedule);
+    transitionCost = Number(cost * (12 / 100));
+
+    // Software Effort Distribution Calculate
+    managementInception = Number(inceptionEffort * (13.9344 / 100));
+    environmentPerCMInception = Number(inceptionEffort * (10.1093 / 100));
+    requirementsInception = Number(inceptionEffort * (37.9781 / 100));
+    designInception = Number(inceptionEffort * (19.1257 / 100));
+    implementationInception = Number(inceptionEffort * (7.9235 / 100));
+    assessmentInception = Number(inceptionEffort * (7.9235 / 100));
+    deploymentInception = Number(inceptionEffort * (3.0055 / 100));
+
+    managementElaboration = Number(elaborationEffort * (12.0137 / 100));
+    environmentPerCMElaboration = Number(elaborationEffort * (7.9833 / 100));
+    requirementsElaboration = Number(elaborationEffort * (18.0205 / 100));
+    designElaboration = Number(elaborationEffort * (35.9727 / 100));
+    implementationElaboration = Number(elaborationEffort * (12.9693 / 100));
+    assessmentElaboration = Number(elaborationEffort * (10.0341 / 100));
+    deploymentElaboration = Number(elaborationEffort * (3.0034 / 100));
+
+    managementConstruction = Number(constructionEffort * (10.0022 / 100));
+    environmentPerCMConstruction = Number(constructionEffort * (5.0011 / 100));
+    requirementsConstruction = Number(constructionEffort * (7.9975 / 100));
+    designConstruction = Number(constructionEffort * (15.9948 / 100));
+    implementationConstruction = Number(constructionEffort * (33.9944 / 100));
+    assessmentConstruction = Number(constructionEffort * (23.9922 / 100));
+    deploymentConstruction = Number(constructionEffort * (2.9963 / 100));
+
+    managementTransition = Number(transitionEffort * (14.0518 / 100));
+    environmentPerCMTransition = Number(transitionEffort * (5.0477 / 100));
+    requirementsTransition = Number(transitionEffort * (3.9563 / 100));
+    designTransition = Number(transitionEffort * (3.9563 / 100));
+    implementationTransition = Number(transitionEffort * (18.9632 / 100));
+    assessmentTransition = Number(transitionEffort * (24.0109 / 100));
+    deploymentTransition = Number(transitionEffort * (30.0136 / 100));
+
+    totalMonth =
+      Math.floor(inceptionSchedule) +
+      Math.floor(elaborationSchedule) +
+      Math.floor(constructionSchedule) +
+      Math.floor(transitionSchedule);
+
+    for (let i = 1; i <= totalMonth; i++) {
+      arr.push(i);
+    }
+
+    for (let i = 1; i <= inceptionSchedule; i++) {
+      dataChart.push(inceptionEffort / inceptionSchedule);
+    }
+
+    for (let i = 1; i <= elaborationSchedule; i++) {
+      dataChart.push(elaborationEffort / elaborationSchedule);
+    }
+
+    for (let i = 1; i <= constructionSchedule; i++) {
+      dataChart.push(constructionEffort / constructionSchedule);
+    }
+
+    for (let i = 1; i <= transitionSchedule; i++) {
+      dataChart.push(transitionEffort / transitionSchedule);
+    }
+
+    arr = arr.map((item, index) => {
+      return { _id: item, data: dataChart[index] };
+    });
   }
 
   return res.status(200).json({
@@ -95,6 +232,54 @@ const calculateFunctionPoints = asyncHandler(async (req, res) => {
       cost,
       totalEquivalentSize: SLOC,
       softwareEAF: EAF,
+      inceptionEffort,
+      inceptionSchedule,
+      inceptionAverageStaff,
+      inceptionCost,
+      elaborationEffort,
+      elaborationSchedule,
+      elaborationAverageStaff,
+      elaborationCost,
+      constructionEffort,
+      constructionSchedule,
+      constructionAverageStaff,
+      constructionCost,
+      transitionEffort,
+      transitionSchedule,
+      transitionAverageStaff,
+      transitionCost,
+      managementInception,
+      environmentPerCMInception,
+      requirementsInception,
+      designInception,
+      implementationInception,
+      assessmentInception,
+      deploymentInception,
+
+      managementElaboration,
+      environmentPerCMElaboration,
+      requirementsElaboration,
+      designElaboration,
+      implementationElaboration,
+      assessmentElaboration,
+      deploymentElaboration,
+
+      managementConstruction,
+      environmentPerCMConstruction,
+      requirementsConstruction,
+      designConstruction,
+      implementationConstruction,
+      assessmentConstruction,
+      deploymentConstruction,
+
+      managementTransition,
+      environmentPerCMTransition,
+      requirementsTransition,
+      designTransition,
+      implementationTransition,
+      assessmentTransition,
+      deploymentTransition,
+      dataChart: arr,
     },
   });
 });
@@ -324,8 +509,6 @@ const calculateSLOC = asyncHandler(async (req, res) => {
       return { _id: item, data: dataChart[index] };
     });
   }
-
-  console.log(arr);
 
   return res.status(200).json({
     success: true,
