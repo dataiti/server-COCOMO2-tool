@@ -285,13 +285,6 @@ const softwareEffortDistributionConstant = {
   deploymentTransition: 30.0136,
 };
 
-// const acquisitionPhaseDistributionConstant = {
-//   inception: [],
-//   elaboration: [],
-//   construction: [],
-//   transition: [],
-// };
-
 module.exports = {
   languageFactor,
   factorials,

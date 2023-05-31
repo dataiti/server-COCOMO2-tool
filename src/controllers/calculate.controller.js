@@ -479,6 +479,7 @@ const calculateSLOC = asyncHandler(async (req, res) => {
     assessmentTransition = Number(transitionEffort * (24.0109 / 100));
     deploymentTransition = Number(transitionEffort * (30.0136 / 100));
 
+    // Staffing Profile Chart
     totalMonth =
       Math.floor(inceptionSchedule) +
       Math.floor(elaborationSchedule) +

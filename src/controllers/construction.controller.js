@@ -256,7 +256,6 @@ const updateConstruction = asyncHandler(async (req, res) => {
   const {
     projectName,
     sizeType,
-    typeSubmit,
     language,
     functionPoints = 0,
     newSize = 0,
@@ -286,6 +285,59 @@ const updateConstruction = asyncHandler(async (req, res) => {
     SITE,
     SCED,
     softwareLaborCostPerPM,
+    softwareEAF,
+    sizeExponent,
+    softwareEffort,
+    softwareSchedule,
+    totalEquivalentSize,
+    cost,
+    inceptionEffort,
+    inceptionSchedule,
+    inceptionAverageStaff,
+    inceptionCost,
+    elaborationEffort,
+    elaborationSchedule,
+    elaborationAverageStaff,
+    elaborationCost,
+    constructionEffort,
+    constructionSchedule,
+    constructionAverageStaff,
+    constructionCost,
+    transitionEffort,
+    transitionSchedule,
+    transitionAverageStaff,
+    transitionCost,
+    managementInception,
+    environmentPerCMInception,
+    requirementsInception,
+    designInception,
+    implementationInception,
+    assessmentInception,
+    deploymentInception,
+
+    managementElaboration,
+    environmentPerCMElaboration,
+    requirementsElaboration,
+    designElaboration,
+    implementationElaboration,
+    assessmentElaboration,
+    deploymentElaboration,
+
+    managementConstruction,
+    environmentPerCMConstruction,
+    requirementsConstruction,
+    designConstruction,
+    implementationConstruction,
+    assessmentConstruction,
+    deploymentConstruction,
+
+    managementTransition,
+    environmentPerCMTransition,
+    requirementsTransition,
+    designTransition,
+    implementationTransition,
+    assessmentTransition,
+    deploymentTransition,
   } = req.body;
 
   const findConstruction = await Construction.findOne({
@@ -295,12 +347,106 @@ const updateConstruction = asyncHandler(async (req, res) => {
 
   if (!findConstruction) throw new Error("Construction is not found");
 
-  if (sizeType === "update") {
-    const updateConstruction = await Construction.findOneAndUpdate(
-      { _id: findConstruction._id, $set: {} },
-      { new: true }
-    );
-  }
+  const updateConstruction = await Construction.findOneAndUpdate(
+    {
+      _id: findConstruction._id,
+    },
+    {
+      $set: {
+        projectName,
+        sizeType,
+        language,
+        functionPoints,
+        newSize,
+        reusedSize,
+        reusedIM,
+        reusedAA,
+        PREC,
+        FLEX,
+        RESL,
+        TEAM,
+        PMAT,
+        RELY,
+        DATA,
+        CPLX,
+        RUSE,
+        DOCU,
+        ACAP,
+        PCAP,
+        PCON,
+        AEXP,
+        PEXP,
+        LTEX,
+        TIME,
+        STOR,
+        PVOL,
+        TOOL,
+        SITE,
+        SCED,
+        softwareLaborCostPerPM,
+        softwareEAF,
+        sizeExponent,
+        softwareEffort,
+        softwareSchedule,
+        totalEquivalentSize,
+        cost,
+        inceptionEffort,
+        inceptionSchedule,
+        inceptionAverageStaff,
+        inceptionCost,
+        elaborationEffort,
+        elaborationSchedule,
+        elaborationAverageStaff,
+        elaborationCost,
+        constructionEffort,
+        constructionSchedule,
+        constructionAverageStaff,
+        constructionCost,
+        transitionEffort,
+        transitionSchedule,
+        transitionAverageStaff,
+        transitionCost,
+        managementInception,
+        environmentPerCMInception,
+        requirementsInception,
+        designInception,
+        implementationInception,
+        assessmentInception,
+        deploymentInception,
+
+        managementElaboration,
+        environmentPerCMElaboration,
+        requirementsElaboration,
+        designElaboration,
+        implementationElaboration,
+        assessmentElaboration,
+        deploymentElaboration,
+
+        managementConstruction,
+        environmentPerCMConstruction,
+        requirementsConstruction,
+        designConstruction,
+        implementationConstruction,
+        assessmentConstruction,
+        deploymentConstruction,
+
+        managementTransition,
+        environmentPerCMTransition,
+        requirementsTransition,
+        designTransition,
+        implementationTransition,
+        assessmentTransition,
+        deploymentTransition,
+      },
+    },
+    { new: true }
+  );
+
+  return res.status(200).json({
+    success: true,
+    message: "Update construction are successfully",
+    data: updateConstruction,
+  });
 });
 
 const deleteConstruction = asyncHandler(async (req, res) => {
@@ -339,7 +485,10 @@ const getListConstructionProject = asyncHandler(async (req, res) => {
   let skip = (page - 1) * limit;
 
   const filterArgs = {
-    $or: [{ projectName: { $regex: regex, $options: "i" } }],
+    $or: [
+      { projectName: { $regex: regex, $options: "i" } },
+      { sizeType: { $regex: regex, $options: "i" } },
+    ],
     ownerProject: req.user._id,
   };
 
