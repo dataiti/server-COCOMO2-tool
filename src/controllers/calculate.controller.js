@@ -203,19 +203,31 @@ const calculateFunctionPoints = asyncHandler(async (req, res) => {
     }
 
     for (let i = 1; i <= inceptionSchedule; i++) {
-      dataChart.push(inceptionEffort / inceptionSchedule);
+      dataChart.push({
+        phase: "inception",
+        value: inceptionEffort / inceptionSchedule,
+      });
     }
 
     for (let i = 1; i <= elaborationSchedule; i++) {
-      dataChart.push(elaborationEffort / elaborationSchedule);
+      dataChart.push({
+        phase: "elaboration",
+        value: elaborationEffort / elaborationSchedule,
+      });
     }
 
     for (let i = 1; i <= constructionSchedule; i++) {
-      dataChart.push(constructionEffort / constructionSchedule);
+      dataChart.push({
+        phase: "construction",
+        value: constructionEffort / constructionSchedule,
+      });
     }
 
     for (let i = 1; i <= transitionSchedule; i++) {
-      dataChart.push(transitionEffort / transitionSchedule);
+      dataChart.push({
+        phase: "transition",
+        value: transitionEffort / transitionSchedule,
+      });
     }
 
     arr = arr.map((item, index) => {
@@ -491,19 +503,31 @@ const calculateSLOC = asyncHandler(async (req, res) => {
     }
 
     for (let i = 1; i <= inceptionSchedule; i++) {
-      dataChart.push(inceptionEffort / inceptionSchedule);
+      dataChart.push({
+        phase: "inception",
+        value: inceptionEffort / inceptionSchedule,
+      });
     }
 
     for (let i = 1; i <= elaborationSchedule; i++) {
-      dataChart.push(elaborationEffort / elaborationSchedule);
+      dataChart.push({
+        phase: "elaboration",
+        value: elaborationEffort / elaborationSchedule,
+      });
     }
 
     for (let i = 1; i <= constructionSchedule; i++) {
-      dataChart.push(constructionEffort / constructionSchedule);
+      dataChart.push({
+        phase: "construction",
+        value: constructionEffort / constructionSchedule,
+      });
     }
 
     for (let i = 1; i <= transitionSchedule; i++) {
-      dataChart.push(transitionEffort / transitionSchedule);
+      dataChart.push({
+        phase: "transition",
+        value: transitionEffort / transitionSchedule,
+      });
     }
 
     arr = arr.map((item, index) => {
@@ -515,6 +539,7 @@ const calculateSLOC = asyncHandler(async (req, res) => {
     success: true,
     message: "Calculate Cocomo ii type size Source Lines of Code  successfully",
     data: {
+      b,
       softwareEffort: effort,
       softwareSchedule: schedule,
       cost,
